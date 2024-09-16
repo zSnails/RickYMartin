@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <ion-card>
+      <ion-card class="ion-margin ion-padding">
         <ion-card-header>
           <ion-card-title>Iniciar Sesión</ion-card-title>
         </ion-card-header>
@@ -12,7 +12,7 @@
             v-model="password" label="Contraseña">
             <ion-input-password-toggle v-if="password.length > 0" slot="end"></ion-input-password-toggle>
           </ion-input>
-          <ion-button type="submit" @click="signIn">Iniciar Sesión</ion-button>
+          <ion-button class="ion-padding" type="submit" @click="signIn">Iniciar Sesión</ion-button>
           <ion-button type="reset" fill="clear" router-link="/register">¿No tienes una cuenta?</ion-button>
         </ion-card-content>
       </ion-card>

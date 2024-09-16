@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <ion-card>
+      <ion-card class="ion-padding ion-margin">
         <ion-card-header>
           <ion-card-title>Registrarse</ion-card-title>
         </ion-card-header>
@@ -16,7 +16,7 @@
             v-model="confirmation" label="Confirmar Contraseña">
             <ion-input-password-toggle v-if="confirmation.length > 0" slot="end"></ion-input-password-toggle>
           </ion-input>
-          <ion-button @click="signUp">Registrarse</ion-button>
+          <ion-button class="ion-padding" @click="signUp">Registrarse</ion-button>
           <ion-button type="reset" fill="clear" router-link="/login">¿Ya tienes una cuenta?</ion-button>
         </ion-card-content>
       </ion-card>
