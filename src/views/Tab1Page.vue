@@ -102,6 +102,7 @@ ion-content {
   --background: #62a4ab;
 }
 
+/*
 ion-item {
   --background: #fffeef;
   --color: #000000;
@@ -110,7 +111,7 @@ ion-item {
 ion-toolbar {
   --background: #62a4ab;
   --color: #97ce4c;
-}
+} */
 
 .schwifty-title {
   font-family: 'GetSchwifty', sans-serif;
