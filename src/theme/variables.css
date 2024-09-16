@@ -1,2 +1,8 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+@font-face {
+    font-family: 'GetSchwifty';
+    src: url('@/assets/fonts/get_schwifty.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }  
