@@ -5,4 +5,12 @@ http://ionicframework.com/docs/theming/ */
     src: url('@/assets/fonts/get_schwifty.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-  }  
+}
+
+.center-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
