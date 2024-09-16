@@ -116,13 +116,13 @@
 
   <style scoped>
     ion-content {
-      --background: #44281d;
+      --background: #62a4ab;
     }
     ion-item {
       --background: #fffeef;
       --color: #000000;
     }ion-toolbar {
-      --background: #44281d;
+      --background: #62a4ab;
       --color: #97ce4c;
     }
     .schwifty-title {
