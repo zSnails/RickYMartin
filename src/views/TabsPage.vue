@@ -43,6 +43,6 @@
 </template>
 
 <script setup lang="ts">
-import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet, IonButtons, IonMenu, IonMenuButton, IonContent, IonHeader, IonToolbar, IonTitle, IonSearchbar} from '@ionic/vue';
+import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet, IonButtons, IonMenu, IonMenuButton, IonContent, IonHeader, IonToolbar, IonTitle} from '@ionic/vue';
 import { ellipse, square, triangle } from 'ionicons/icons';
 </script>
