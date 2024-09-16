@@ -2,9 +2,16 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <ion-card>
-        <ion-card-content>
-          <ion-input label-placement="floating" type="email" v-model="email" label="Correo"></ion-input>
-          <ion-input label-placement="floating" type="password" v-model="password" label="Contraseña"></ion-input>
+        <ion-card-header>
+          <ion-card-title>Iniciar Sesión</ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="center-content">
+          <ion-input error-text="Correo inválido" ref="mail" label-placement="floating" type="email" v-model="email"
+            label="Correo"></ion-input>
+          <ion-input error-text="Contraseña inválida" ref="pwd" label-placement="floating" type="password"
+            v-model="password" label="Contraseña">
+            <ion-input-password-toggle v-if="password.length > 0" slot="end"></ion-input-password-toggle>
+          </ion-input>
           <ion-button type="submit" @click="signIn">Iniciar Sesión</ion-button>
           <ion-button type="reset" fill="clear" router-link="/register">¿No tienes una cuenta?</ion-button>
         </ion-card-content>
@@ -13,7 +20,7 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import { IonInput, IonButton, IonCard, IonCardContent, IonContent, IonPage, useIonRouter } from "@ionic/vue";
+import { IonInput, IonButton, IonInputPasswordToggle, IonCard, IonCardContent, IonContent, IonPage, useIonRouter } from "@ionic/vue";
 import { ref } from "vue";
 import supabase from "@/supabase";
 

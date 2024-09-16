@@ -2,11 +2,20 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <ion-card>
-        <ion-card-content>
-          <ion-input label-placement="floating" type="email" v-model="email" label="Correo"></ion-input>
-          <ion-input label-placement="floating" type="password" v-model="password" label="Contraseña"></ion-input>
-          <ion-input label-placement="floating" type="password" v-model="confirmation"
-            label="Confirmar Contraseña"></ion-input>
+        <ion-card-header>
+          <ion-card-title>Registrarse</ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="center-content">
+          <ion-input error-text="Correo inválido" label-placement="floating" type="email" v-model="email"
+            label="Correo"></ion-input>
+          <ion-input error-text="Contraseña inválida" label-placement="floating" type="password" v-model="password"
+            label="Contraseña">
+            <ion-input-password-toggle v-if="password.length > 0" slot="end"></ion-input-password-toggle>
+          </ion-input>
+          <ion-input error-text="Las contraseñas no coinciden" label-placement="floating" type="password"
+            v-model="confirmation" label="Confirmar Contraseña">
+            <ion-input-password-toggle v-if="confirmation.length > 0" slot="end"></ion-input-password-toggle>
+          </ion-input>
           <ion-button @click="signUp">Registrarse</ion-button>
           <ion-button type="reset" fill="clear" router-link="/login">¿Ya tienes una cuenta?</ion-button>
         </ion-card-content>
@@ -16,7 +25,7 @@
 </template>
 <script setup lang="ts">
 import supabase from '@/supabase';
-import { IonPage, IonContent, useIonRouter, IonButton, IonInput, IonCardContent, IonCard } from '@ionic/vue';
+import { IonPage, IonContent, IonInputPasswordToggle, useIonRouter, IonButton, IonInput, IonCardContent, IonCard } from '@ionic/vue';
 import { ref } from 'vue';
 
 const email = ref<string>("");
