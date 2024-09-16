@@ -12,22 +12,11 @@
         </ion-toolbar>
       </ion-header>
 
-
-      <ion-searchbar
-        v-model="searchQuery"
-        :debounce="500"
-        @ionInput="filterCharacters"
-        placeholder="Buscar personajes..."
-      ></ion-searchbar>
-
+      <ion-searchbar v-model="searchQuery" :debounce="500" @ionInput="filterCharacters"
+        placeholder="Buscar personajes..."></ion-searchbar>
 
       <ion-list>
-        <ion-item
-          v-for="character in filteredCharacters"
-          :key="character.id"
-          button
-          routerLink="/character-details"
-        >
+        <ion-item v-for="character in filteredCharacters" :key="character.id" button routerLink="/character-details">
           <ion-avatar slot="start">
             <img :src="character.image" alt="character image" />
           </ion-avatar>
@@ -40,11 +29,9 @@
         </ion-item>
       </ion-list>
 
-      <ion-infinite-scroll threshold="100px" @ionInfinite="loadMoreCharacters">
-        <ion-infinite-scroll-content
-          loadingSpinner="bubbles"
-          loadingText="Cargando más personajes..."
-        ></ion-infinite-scroll-content>
+      <ion-infinite-scroll threshold="100px" @ionInfinite="loadCharacters">
+        <ion-infinite-scroll-content loadingSpinner="bubbles"
+          loadingText="Cargando más personajes..."></ion-infinite-scroll-content>
       </ion-infinite-scroll>
     </ion-content>
   </ion-page>
@@ -52,9 +39,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonAvatar, IonLabel, IonSearchbar, IonInfiniteScroll, IonInfiniteScrollContent} from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonAvatar, IonLabel, IonSearchbar, IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/vue';
 import axios from 'axios';
-
 
 interface Character {
   id: number;
@@ -63,10 +49,10 @@ interface Character {
   image: string;
 }
 
-const characters = ref<Character[]>([]);  
-const filteredCharacters = ref<Character[]>([]);  
-const searchQuery = ref('');  
-const nextPage = ref<string | null>('https://rickandmortyapi.com/api/character');
+const characters = ref<Character[]>([]);
+const filteredCharacters = ref<Character[]>([]);
+const searchQuery = ref('');
+const nextPage = ref<string>('https://rickandmortyapi.com/api/character');
 
 const loadCharacters = async (event: CustomEvent | null = null) => {
   if (nextPage.value) {
@@ -78,10 +64,10 @@ const loadCharacters = async (event: CustomEvent | null = null) => {
   }
 
   if (event) {
-    const infiniteScroll = event.target as HTMLIonInfiniteScrollElement;  
-    infiniteScroll.complete(); 
+    const infiniteScroll = event.target as HTMLIonInfiniteScrollElement;
+    infiniteScroll.complete();
     if (!nextPage.value) {
-      infiniteScroll.disabled = true;  
+      infiniteScroll.disabled = true;
     }
   }
 };
@@ -103,9 +89,9 @@ const getStatusColor = (status: string) => {
   return { color: 'gray' };
 };
 
-const loadMoreCharacters = (event: CustomEvent) => {
-  loadCharacters(event);
-};
+// const loadMoreCharacters = (event: CustomEvent) => {
+//   loadCharacters(event);
+// };
 
 const filterCharacters = () => {
   const query = searchQuery.value.toLowerCase();
