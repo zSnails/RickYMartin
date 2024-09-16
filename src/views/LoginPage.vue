@@ -6,7 +6,6 @@
           <ion-input label-placement="floating" type="email" v-model="email" label="Correo"></ion-input>
           <ion-input label-placement="floating" type="password" v-model="password" label="Contraseña"></ion-input>
           <ion-button type="submit" @click="signIn">Iniciar Sesión</ion-button>
-          <!-- <ion-router-link href="/register">¿No tienes una cuenta?</ion-router-link> -->
           <ion-button type="reset" fill="clear" router-link="/register">¿No tienes una cuenta?</ion-button>
         </ion-card-content>
       </ion-card>
