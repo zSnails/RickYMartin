@@ -1,41 +1,41 @@
-<template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Personajes Rick and Morty</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
+  <template>
+    <ion-page>
+      <ion-header>
         <ion-toolbar>
-          <ion-title size="large">Personajes</ion-title>
+          <ion-title>Personajes Rick and Morty</ion-title>
         </ion-toolbar>
       </ion-header>
+      <ion-content :fullscreen="true">
+        <ion-header collapse="condense">
+          <ion-toolbar>
+            <ion-title size="large" class="schwifty-title">Personajes</ion-title>
+          </ion-toolbar>
+        </ion-header>
 
-      <ion-searchbar v-model="searchQuery" :debounce="500" @ionInput="filterCharacters"
-        placeholder="Buscar personajes..."></ion-searchbar>
+        <ion-searchbar color="light" v-model="searchQuery" :debounce="500" @ionInput="filterCharacters"
+          placeholder="Buscar personajes..."></ion-searchbar>
 
-      <ion-list>
-        <ion-item v-for="character in filteredCharacters" :key="character.id" button routerLink="/character-details">
-          <ion-avatar slot="start">
-            <img :src="character.image" alt="character image" />
-          </ion-avatar>
-          <ion-label>
-            <h2>{{ character.name }}</h2>
-            <p :style="getStatusColor(character.status)">
-              {{ getStatusText(character.status) }}
-            </p>
-          </ion-label>
-        </ion-item>
-      </ion-list>
+        <ion-list>
+          <ion-item v-for="character in filteredCharacters" :key="character.id" button routerLink="/character-details">
+            <ion-avatar slot="start">
+              <img :src="character.image" alt="character image" />
+            </ion-avatar>
+            <ion-label>
+              <h2>{{ character.name }}</h2>
+              <p :style="getStatusColor(character.status)">
+                {{ getStatusText(character.status) }}
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
 
-      <ion-infinite-scroll threshold="100px" @ionInfinite="loadCharacters">
-        <ion-infinite-scroll-content loadingSpinner="bubbles"
-          loadingText="Cargando más personajes..."></ion-infinite-scroll-content>
-      </ion-infinite-scroll>
-    </ion-content>
-  </ion-page>
-</template>
+        <ion-infinite-scroll threshold="100px" @ionInfinite="loadCharacters">
+          <ion-infinite-scroll-content loadingSpinner="bubbles"
+            loadingText="Cargando más personajes..."></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-content>
+    </ion-page>
+  </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
@@ -52,7 +52,7 @@ interface Character {
 const characters = ref<Character[]>([]);
 const filteredCharacters = ref<Character[]>([]);
 const searchQuery = ref('');
-const nextPage = ref<string>('https://rickandmortyapi.com/api/character');
+const nextPage = ref<string | null>('https://rickandmortyapi.com/api/character');
 
 const loadCharacters = async (event: CustomEvent | null = null) => {
   if (nextPage.value) {
@@ -89,10 +89,6 @@ const getStatusColor = (status: string) => {
   return { color: 'gray' };
 };
 
-// const loadMoreCharacters = (event: CustomEvent) => {
-//   loadCharacters(event);
-// };
-
 const filterCharacters = () => {
   const query = searchQuery.value.toLowerCase();
   filteredCharacters.value = characters.value.filter(character =>
@@ -100,3 +96,25 @@ const filterCharacters = () => {
   );
 };
 </script>
+
+<style scoped>
+ion-content {
+  --background: #62a4ab;
+}
+
+ion-item {
+  --background: #fffeef;
+  --color: #000000;
+}
+
+ion-toolbar {
+  --background: #62a4ab;
+  --color: #97ce4c;
+}
+
+.schwifty-title {
+  font-family: 'GetSchwifty', sans-serif;
+  font-size: 3rem;
+}
+</style>
+
