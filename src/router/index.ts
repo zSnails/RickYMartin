@@ -3,7 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 import TabsPage from '@/views/TabsPage.vue';
 import LoginPage from "@/views/LoginPage.vue";
 import SignUpPage from '@/views/SignUpPage.vue';
-
+import EpisodePage from '@/views/episode/[id].vue';
 import auth from './middleware/auth';
 
 const routes: Array<RouteRecordRaw> = [
@@ -42,6 +42,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Tab3Page.vue')
       }
     ]
+  },
+  {
+    path: '/episode/:id',
+    name: 'Episode',
+    component: EpisodePage
   }
 ]
 
