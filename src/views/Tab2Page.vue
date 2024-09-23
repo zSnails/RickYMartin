@@ -12,7 +12,7 @@
         </ion-toolbar>
       </ion-header>
       <ion-list>
-        <ion-item v-for="episode in episodes" :key="episode.id" button :to="`/episode/${episode.id}`">
+        <ion-item v-for="episode in episodes" :key="episode.id" button :href="`/episode/${episode.id}`">
           <ion-avatar slot="start">
           </ion-avatar>
           <ion-label>
