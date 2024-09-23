@@ -11,6 +11,8 @@
           <ion-title size="large" class="schwifty-title">Personajes</ion-title>
         </ion-toolbar>
       </ion-header>
+      <ion-searchbar color="light" v-model="searchQuery" :debounce="500" @ionInput="filterEpisodes"
+        placeholder="Buscar episodios..."></ion-searchbar>
       <ion-list>
         <ion-item v-for="episode in episodes" :key="episode.id" button :href="`/episode/${episode.id}`">
           <ion-avatar slot="start">
@@ -45,12 +47,15 @@ interface Episode {
 
 const episodes = ref<Episode[]>([]);
 const nextPage = ref<string | null>('https://rickandmortyapi.com/api/episode');
+const searchQuery = ref('');  
+
 
 const loadEpisodes = async (event: CustomEvent | null = null) => {
   if (nextPage.value) {
     const response = await axios.get(nextPage.value);
     const results: Episode[] = response.data.results;
     episodes.value.push(...results);
+    filterEpisodes();
     nextPage.value = response.data.info.next;
   }
 
@@ -61,6 +66,14 @@ const loadEpisodes = async (event: CustomEvent | null = null) => {
       infiniteScroll.disabled = true;
     }
   }
+};
+
+const filterEpisodes = () => {
+  const query = searchQuery.value.toLowerCase();
+  episodes.value = episodes.value.filter(episode => {
+    const matchesQuery = episode.name.toLowerCase().includes(query);
+    return matchesQuery;
+  });
 };
 
 
