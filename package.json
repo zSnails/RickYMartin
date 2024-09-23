@@ -24,9 +24,11 @@
     "@supabase/supabase-js": "^2.45.4",
     "axios": "^1.7.7",
     "ionicons": "^7.0.0",
+    "vis-data": "^7.1.9",
+    "vis-network": "^9.1.9",
+    "vis.js": "^1.1.0",
     "vue": "^3.3.0",
-    "vue-router": "^4.2.0",
-    "webcola": "^3.4.0"
+    "vue-router": "^4.2.0"
   },
   "devDependencies": {
     "@capacitor/cli": "6.1.2",
