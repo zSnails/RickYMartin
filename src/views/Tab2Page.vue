@@ -23,7 +23,6 @@
     </ion-action-sheet>
   </ion-page>
 </template>
-
 <script setup lang="ts">
 import { Result, Root } from '@/characters-root';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, ActionSheetButton } from '@ionic/vue';
