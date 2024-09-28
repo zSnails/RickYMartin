@@ -12,27 +12,39 @@
         </ion-toolbar>
       </ion-header>
 
+      <!-- Searchbar for name -->
       <ion-searchbar color="light"
         v-model="searchQuery"
         :debounce="500"
-        @ionInput="filterCharacters"
+        @ionInput="onFilterChange"
         placeholder="Buscar personajes..."
       ></ion-searchbar>
 
-      <ion-select placeholder="Filtrar por especie" v-model="selectedSpecies" @ionChange="filterCharactersBySpecies">
+      <!-- Select for species -->
+      <ion-select placeholder="Filtrar por especie" v-model="selectedSpecies" @ionChange="onFilterChange">
         <ion-select-option value="">Todas las especies</ion-select-option>
-        <ion-select-option value="Human">Human</ion-select-option>
+        <ion-select-option value="Human">Humano</ion-select-option>
         <ion-select-option value="Alien">Alien</ion-select-option>
-        <ion-select-option value="Humanoid">Humanoid</ion-select-option>
-        <ion-select-option value="Unknown">Unknown</ion-select-option>
-        <ion-select-option value="Poppybutthole">Poppybutthole</ion-select-option>
-        <ion-select-option value="MythologicalCreature">Mythological Creature</ion-select-option>
+        <ion-select-option value="Humanoid">Humanoide</ion-select-option>
+        <ion-select-option value="Unknown">Desconocido</ion-select-option>
+        <ion-select-option value="poopybutthole">Poppybutthole</ion-select-option>
+        <ion-select-option value="MythologicalCreature">Criatura Mítica</ion-select-option>
         <ion-select-option value="Animal">Animal</ion-select-option>
         <ion-select-option value="Robot">Robot</ion-select-option>
         <ion-select-option value="Cronenberg">Cronenberg</ion-select-option>
-        <ion-select-option value="Disease">Disease</ion-select-option>
+        <ion-select-option value="Disease">Enfermedad</ion-select-option>
       </ion-select>
 
+      <!-- Select for gender -->
+      <ion-select placeholder="Filtrar por género" v-model="selectedGender" @ionChange="onFilterChange">
+        <ion-select-option value="">Todos los géneros</ion-select-option>
+        <ion-select-option value="Female">Femenino</ion-select-option>
+        <ion-select-option value="Male">Masculino</ion-select-option>
+        <ion-select-option value="Genderless">Sin género</ion-select-option>
+        <ion-select-option value="unknown">Desconocido</ion-select-option>
+      </ion-select>
+
+      <!-- List of filtered characters -->
       <ion-list>
         <ion-item
           v-for="character in filteredCharacters"
@@ -52,6 +64,7 @@
         </ion-item>
       </ion-list>
 
+      <!-- Infinite scroll -->
       <ion-infinite-scroll threshold="100px" @ionInfinite="loadMoreCharacters">
         <ion-infinite-scroll-content
           loadingSpinner="bubbles"
@@ -73,22 +86,43 @@
     status: string;
     image: string;
     species: string; 
+    gender: string;
   }
 
   const characters = ref<Character[]>([]);  
   const filteredCharacters = ref<Character[]>([]);  
   const searchQuery = ref('');  
   const selectedSpecies = ref('');
-  const nextPage = ref<string | null>('https://rickandmortyapi.com/api/character');
+  const selectedGender = ref('');
+  const nextPage = ref<string | null>(null);
 
-  const loadCharacters = async (event: CustomEvent | null = null) => {
-    if (nextPage.value) {
-      const response = await axios.get(nextPage.value);
+  const loadCharacters = async (event: CustomEvent | null = null, reset = false) => {
+    if (reset) {
+      characters.value = [];  // Reiniciar la lista de personajes
+      nextPage.value = null;  // Reiniciar la paginación
+    }
+
+    let url = nextPage.value || 'https://rickandmortyapi.com/api/character';
+
+    // Añadimos filtros a la URL de la API
+    const filters: string[] = [];
+    if (searchQuery.value) filters.push(`name=${searchQuery.value}`);
+    if (selectedSpecies.value) filters.push(`species=${selectedSpecies.value}`);
+    if (selectedGender.value) filters.push(`gender=${selectedGender.value}`);
+    
+    if (filters.length > 0) {
+      url += `?${filters.join('&')}`;
+    }
+
+    try {
+      const response = await axios.get(url);
       const results: Character[] = response.data.results;
       characters.value.push(...results);
-      filterCharacters();
+      filteredCharacters.value = characters.value;  // Se muestran los personajes filtrados
 
       nextPage.value = response.data.info.next;
+    } catch (error) {
+      console.error('Error loading characters:', error);
     }
 
     if (event) {
@@ -120,17 +154,9 @@
     loadCharacters(event);
   };
 
-  const filterCharacters = () => {
-    const query = searchQuery.value.toLowerCase();
-    filteredCharacters.value = characters.value.filter(character => {
-      const matchesQuery = character.name.toLowerCase().includes(query);
-      const matchesSpecies = selectedSpecies.value ? character.species === selectedSpecies.value : true;
-      return matchesQuery && matchesSpecies;
-    });
-  };
-
-  const filterCharactersBySpecies = () => {
-    filterCharacters();
+  // Modificamos la función de filtro para incluir todos los criterios y reiniciar la lista
+  const onFilterChange = () => {
+    loadCharacters(null, true);  // Reset al aplicar nuevos filtros
   };
 </script>
 
