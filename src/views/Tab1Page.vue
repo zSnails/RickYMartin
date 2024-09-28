@@ -12,7 +12,6 @@
         </ion-toolbar>
       </ion-header>
 
-      <!-- Searchbar for name -->
       <ion-searchbar color="light"
         v-model="searchQuery"
         :debounce="500"
@@ -20,7 +19,6 @@
         placeholder="Buscar personajes..."
       ></ion-searchbar>
 
-      <!-- Select for species -->
       <ion-select placeholder="Filtrar por especie" v-model="selectedSpecies" @ionChange="onFilterChange">
         <ion-select-option value="">Todas las especies</ion-select-option>
         <ion-select-option value="Human">Humano</ion-select-option>
@@ -35,7 +33,6 @@
         <ion-select-option value="Disease">Enfermedad</ion-select-option>
       </ion-select>
 
-      <!-- Select for gender -->
       <ion-select placeholder="Filtrar por género" v-model="selectedGender" @ionChange="onFilterChange">
         <ion-select-option value="">Todos los géneros</ion-select-option>
         <ion-select-option value="Female">Femenino</ion-select-option>
@@ -44,7 +41,6 @@
         <ion-select-option value="unknown">Desconocido</ion-select-option>
       </ion-select>
 
-      <!-- List of filtered characters -->
       <ion-list>
         <ion-item
           v-for="character in filteredCharacters"
@@ -64,7 +60,6 @@
         </ion-item>
       </ion-list>
 
-      <!-- Infinite scroll -->
       <ion-infinite-scroll threshold="100px" @ionInfinite="loadMoreCharacters">
         <ion-infinite-scroll-content
           loadingSpinner="bubbles"
@@ -98,13 +93,12 @@
 
   const loadCharacters = async (event: CustomEvent | null = null, reset = false) => {
     if (reset) {
-      characters.value = [];  // Reiniciar la lista de personajes
-      nextPage.value = null;  // Reiniciar la paginación
+      characters.value = [];  
+      nextPage.value = null;  
     }
 
     let url = nextPage.value || 'https://rickandmortyapi.com/api/character';
 
-    // Añadimos filtros a la URL de la API
     const filters: string[] = [];
     if (searchQuery.value) filters.push(`name=${searchQuery.value}`);
     if (selectedSpecies.value) filters.push(`species=${selectedSpecies.value}`);
@@ -118,7 +112,7 @@
       const response = await axios.get(url);
       const results: Character[] = response.data.results;
       characters.value.push(...results);
-      filteredCharacters.value = characters.value;  // Se muestran los personajes filtrados
+      filteredCharacters.value = characters.value;
 
       nextPage.value = response.data.info.next;
     } catch (error) {
@@ -154,9 +148,8 @@
     loadCharacters(event);
   };
 
-  // Modificamos la función de filtro para incluir todos los criterios y reiniciar la lista
   const onFilterChange = () => {
-    loadCharacters(null, true);  // Reset al aplicar nuevos filtros
+    loadCharacters(null, true);  
   };
 </script>
 
