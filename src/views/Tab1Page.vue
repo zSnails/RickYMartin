@@ -12,12 +12,8 @@
         </ion-toolbar>
       </ion-header>
 
-      <ion-searchbar color="light"
-        v-model="searchQuery"
-        :debounce="500"
-        @ionInput="filterCharacters"
-        placeholder="Buscar personajes..."
-      ></ion-searchbar>
+      <ion-searchbar color="light" v-model="searchQuery" :debounce="500" @ionInput="filterCharacters"
+        placeholder="Buscar personajes..."></ion-searchbar>
 
       <ion-select placeholder="Filtrar por especie" v-model="selectedSpecies" @ionChange="filterCharactersBySpecies">
         <ion-select-option value="">Todas las especies</ion-select-option>
@@ -32,14 +28,13 @@
         <ion-select-option value="Cronenberg">Cronenberg</ion-select-option>
         <ion-select-option value="Disease">Disease</ion-select-option>
       </ion-select>
+      <ion-select placeholder="Filtrar por episodio" v-model="selectedEpisode" @ionChange="filterCharactersByEpisode">
+        <ion-select-option value="">Cualquier episodio</ion-select-option>
+        <ion-select-option v-for="episode in episodes" :key="episode.id" :value="episode">{{ episode.episode + " " +episode.name}}</ion-select-option>
+      </ion-select>
 
       <ion-list>
-        <ion-item
-          v-for="character in filteredCharacters"
-          :key="character.id"
-          button
-          routerLink="/character-details"
-        >
+        <ion-item v-for="character in filteredCharacters" :key="character.id" button routerLink="/character-details">
           <ion-avatar slot="start">
             <img :src="character.image" alt="character image" />
           </ion-avatar>
@@ -53,10 +48,8 @@
       </ion-list>
 
       <ion-infinite-scroll threshold="100px" @ionInfinite="loadMoreCharacters">
-        <ion-infinite-scroll-content
-          loadingSpinner="bubbles"
-          loadingText="Cargando más personajes..."
-        ></ion-infinite-scroll-content>
+        <ion-infinite-scroll-content loadingSpinner="bubbles"
+          loadingText="Cargando más personajes..."></ion-infinite-scroll-content>
       </ion-infinite-scroll>
     </ion-content>
   </ion-page>
@@ -73,6 +66,14 @@
     status: string;
     image: string;
     species: string; 
+    episode: string[];
+  }
+
+  interface Episode {
+    id: number;
+    name: string;
+    episode: string;
+    url: string;
   }
 
   const characters = ref<Character[]>([]);  
@@ -80,6 +81,9 @@
   const searchQuery = ref('');  
   const selectedSpecies = ref('');
   const nextPage = ref<string | null>('https://rickandmortyapi.com/api/character');
+  const selectedEpisode = ref('');
+  const episodes = ref<Episode[]>([]);
+  const nextPageEpisodes = ref<string | null>('https://rickandmortyapi.com/api/episode');
 
   const loadCharacters = async (event: CustomEvent | null = null) => {
     if (nextPage.value) {
@@ -100,8 +104,20 @@
     }
   };
 
+  const loadEpisodes = async () => {
+    if (nextPageEpisodes.value) {
+      const response = await axios.get(nextPageEpisodes.value);
+      episodes.value.push(...response.data.results);
+      if (response.data.info.next) {
+        nextPageEpisodes.value = response.data.info.next;
+        loadEpisodes();
+      }
+    };
+  };
+
   onMounted(() => {
     loadCharacters();  
+    loadEpisodes(); 
   });
 
   const getStatusText = (status: string) => {
@@ -125,13 +141,20 @@
     filteredCharacters.value = characters.value.filter(character => {
       const matchesQuery = character.name.toLowerCase().includes(query);
       const matchesSpecies = selectedSpecies.value ? character.species === selectedSpecies.value : true;
-      return matchesQuery && matchesSpecies;
+      //@ts-ignore              perdon Z :(
+      const matchesEpisode = selectedEpisode.value.url ? character.episode.includes(selectedEpisode.value.url) : true;
+      return matchesQuery && matchesSpecies && matchesEpisode;
     });
   };
 
   const filterCharactersBySpecies = () => {
     filterCharacters();
   };
+
+  const filterCharactersByEpisode = () => {
+    filterCharacters();
+  };
+
 </script>
 
 <style scoped>
