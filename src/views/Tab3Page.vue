@@ -24,10 +24,7 @@
         </ion-item>
       </ion-list>
 
-      <ion-infinite-scroll threshold="100px" @ionInfinite="loadMoreEpisodes">
-        <ion-infinite-scroll-content loadingSpinner="bubbles"
-          loadingText="Cargando más personajes..."></ion-infinite-scroll-content>
-      </ion-infinite-scroll>
+
     </ion-content>
   </ion-page>
 </template>
@@ -35,7 +32,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonAvatar, IonLabel, IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar, IonList, IonItem, IonAvatar, IonLabel } from '@ionic/vue';
 
 interface Episode {
   id: number;
@@ -50,30 +47,29 @@ const nextPage = ref<string | null>('https://rickandmortyapi.com/api/episode');
 const searchQuery = ref('');  
 
 
-const loadEpisodes = async (event: CustomEvent | null = null) => {
+const loadEpisodes = async () => {
   if (nextPage.value) {
     const response = await axios.get(nextPage.value);
     const results: Episode[] = response.data.results;
-    episodes.value.push(...results);
-    filterEpisodes();
-    nextPage.value = response.data.info.next;
-  }
-
-  if (event) {
-    const infiniteScroll = event.target as HTMLIonInfiniteScrollElement;
-    infiniteScroll.complete();
-    if (!nextPage.value) {
-      infiniteScroll.disabled = true;
+    
+    results.forEach((episode) => {
+      if (episode.name.toLowerCase().includes(searchQuery.value.toLowerCase())) {
+        episodes.value.push(episode);
+      }
+    });
+    
+    if (response.data.info.next) {
+      nextPage.value = response.data.info.next;
+      loadEpisodes();
     }
+    
   }
 };
 
 const filterEpisodes = () => {
-  const query = searchQuery.value.toLowerCase();
-  episodes.value = episodes.value.filter(episode => {
-    const matchesQuery = episode.name.toLowerCase().includes(query);
-    return matchesQuery;
-  });
+  episodes.value = [];
+  nextPage.value = 'https://rickandmortyapi.com/api/episode';
+  loadEpisodes();
 };
 
 
@@ -82,9 +78,7 @@ onMounted(() => {
   loadEpisodes();
 });
 
-const loadMoreEpisodes = (event: CustomEvent) => {
-  loadEpisodes(event);
-};
+
 </script>
 
 
