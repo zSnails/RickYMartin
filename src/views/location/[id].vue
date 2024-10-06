@@ -8,7 +8,6 @@
       <ion-content :fullscreen="true">
         <ion-header collapse="condense">
           <ion-toolbar>
-            <ion-button shape="round" color="dark" size="default" @click="goBack">Volver</ion-button>
             <ion-title size="large">Detalles de la Location</ion-title>
           </ion-toolbar>
         </ion-header>
@@ -21,7 +20,6 @@
             <ion-card-subtitle>Dimensión: {{ location?.dimension }}</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
-            <!-- Lista de personajes residentes -->
             <h1>Residentes</h1>
             <ion-list>
               <ion-item

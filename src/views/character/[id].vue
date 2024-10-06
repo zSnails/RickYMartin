@@ -12,7 +12,7 @@
       <ion-content :fullscreen="true">
         <ion-card v-if="character">
           <ion-card-header>
-            <ion-button shape="round" color="dark" size="default" @click="goBack">Volver</ion-button>
+            <ion-button shape="round" color="dark" size="default" @click="router.back()">Volver</ion-button>
             <ion-card-title>{{ character.name }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
@@ -76,10 +76,6 @@
     }
   };
 
-  const goBack = () => {
-  router.back(); 
-};
-  
   onMounted(() => {
     loadCharacter();
   });
