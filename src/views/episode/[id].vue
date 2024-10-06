@@ -22,8 +22,7 @@
                 <ion-card-content>
                     <ion-list>
                         <h1>Personajes</h1>
-                        <ion-item v-for="character in charactersList" :key="character.id" button
-                            routerLink="/character-details">
+                        <ion-item v-for="character in charactersList" :key="character.id" button :href="`/character/${character.id}`" >
                             <ion-avatar slot="start">
                                 <img :src="character.image" alt="character image" />
                             </ion-avatar>

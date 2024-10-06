@@ -43,8 +43,17 @@
       </ion-select>
 
       <ion-list>
+<<<<<<< Updated upstream
         <!-- <ion-item v-for="character in filteredCharacters" :key="character.id" button :routerLink="`/character/${character.id}`"> -->
         <ion-item v-for="character in filteredCharacters" :key="character.id" :button="true">
+=======
+        <ion-item
+          v-for="character in filteredCharacters"
+          :key="character.id"
+          button
+          :href="`/character/${character.id}`"
+        >
+>>>>>>> Stashed changes
           <ion-avatar slot="start">
             <img :src="character.image" alt="character image" />
           </ion-avatar>
@@ -69,12 +78,17 @@
 </template>
 
 <script setup lang="ts">
+<<<<<<< Updated upstream
 import { ref, onMounted } from 'vue';
 import { ellipsisVertical, star } from "ionicons/icons";
 import { toastController, actionSheetController } from "@ionic/vue";
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonAvatar, IonLabel, IonSearchbar, IonSelect, IonSelectOption, IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/vue';
 import axios from 'axios';
 import supabase from '@/supabase';
+=======
+  import { ref, onMounted } from 'vue';
+  import axios from 'axios';
+>>>>>>> Stashed changes
 
 async function openActionSheet(id: number) {
   const { data, error } = await supabase.from("favorites").select().eq("character_id", id).limit(1);
