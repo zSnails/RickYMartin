@@ -5,29 +5,27 @@
         <ion-buttons defaultHref="/home" slot="start">
           <ion-back-button></ion-back-button>
         </ion-buttons>
-        <ion-title>Detalles del Personaje</ion-title>
+        <ion-title>{{ character?.name }}</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Detalles del Personaje</ion-title>
+          <ion-title size="large">{{ character?.name }}</ion-title>
         </ion-toolbar>
       </ion-header>
+
       <ion-card>
         <ion-card-header v-if="character">
+          <ion-card-title>{{ character.name }}</ion-card-title>
           <ion-avatar>
-            <img :src="character.image" alt="">
+            <img :src="character.image" alt="Imagen del personaje" />
           </ion-avatar>
-          <ion-card-title>Nombre: {{ character.name }}</ion-card-title>
-          <ion-card-subtitle>Ubicación: {{ character.location.name }}</ion-card-subtitle>
-          <span class="biological-info">
-            <ion-card-subtitle>{{ character.gender }}</ion-card-subtitle>
-            -
-            <ion-card-subtitle>{{ character.species }}</ion-card-subtitle>
-            -
-            <ion-card-subtitle>{{ character.status }}</ion-card-subtitle>
-          </span>
+          <h2>Estado: {{ character.status }}</h2>
+          <h3>Especie: {{ character.species }}</h3>
+          <h3>Género: {{ character.gender }}</h3>
+          <h3>Origen: {{ character.origin.name }}</h3>
+          <h3>Ubicación actual: {{ character.location.name }}</h3>
         </ion-card-header>
         <ion-card-content class="h-fit">
           <h1>Amigos</h1>
@@ -113,7 +111,10 @@ axios.get<Root>(`https://rickandmortyapi.com/api/character/${params.id}`).then(a
 
 
 onMounted(async () => {
-  const container = document.getElementById(`character-relation-graph-root-${params.id}`) as HTMLElement;
+  const elemid = `character-relation-graph-root-${params.id}`;
+  console.log(elemid);
+  const container = document.getElementById(elemid) as HTMLElement;
+  console.log(container);
   const data: Data = {
     nodes: nodes,
     edges: edges,
