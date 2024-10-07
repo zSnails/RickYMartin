@@ -30,7 +30,8 @@
           </span>
         </ion-card-header>
         <ion-card-content class="h-fit">
-          <div class="graph-container" id="character-relation-graph"></div>
+          <h1>Amigos</h1>
+          <div class="graph-container" :id="`character-relation-graph-root-${params.id}`"></div>
         </ion-card-content>
       </ion-card>
     </ion-content>
@@ -39,32 +40,37 @@
 <script setup lang="ts">
 import { Network, Data, Edge, Node, Options, DataSet } from "vis-network/standalone";
 import { Root } from '@/character-details';
-import { IonPage, IonCard, IonHeader, IonContent, IonTitle, IonToolbar, IonButtons, IonBackButton } from '@ionic/vue';
+import { IonPage, IonCard, IonHeader, IonContent, IonTitle, IonToolbar, IonButtons, IonBackButton, useIonRouter } from '@ionic/vue';
 import axios from "axios";
-import { onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useRoute } from 'vue-router';
+import { sleep } from "@supabase/auth-js/dist/module/lib/helpers";
 
 const { params } = useRoute();
 
 const nodes = new DataSet<Node>([]);
 const edges = new DataSet<Edge>([]);
+const { push } = useIonRouter();
 
 const character = ref<Root | null>(null);
 
 const network = ref<Network | null>();
 
-interface Episode {
+interface Location {
   id: number
   name: string
-  air_date: string
-  episode: string
-  characters: string[]
+  type: string
+  dimension: string
+  residents: string[]
   url: string
   created: string
 }
 
+const seenCharacters: Record<string, boolean> = {};
+
 const fetchCharacter = async (rootId: number, char: string) => {
   const { data: character } = await axios.get<Root>(char);
+  if (character.id === rootId) return;
   nodes.update({
     id: character.id,
     image: character.image,
@@ -78,15 +84,17 @@ const fetchCharacter = async (rootId: number, char: string) => {
   });
 };
 
-const fetchEpisode = async (rootId: number, ep: string) => {
-  const { data: episode } = await axios.get<Episode>(ep);
-  for (const character of episode.characters) {
-    fetchCharacter(rootId, character);
+const fetchLocation = async (rootId: number, location: string) => {
+  const { data: episode } = await axios.get<Location>(location);
+  for (const resident of episode.residents) {
+    if (Object.hasOwn(seenCharacters, resident)) continue;
+    fetchCharacter(rootId, resident);
+    seenCharacters[resident] = true;
     await sleep(1000);
   }
 };
 
-axios.get<Root>(`https://rickandmortyapi.com/api/character/${params.id}`).then(({ data: char }) => {
+axios.get<Root>(`https://rickandmortyapi.com/api/character/${params.id}`).then(async ({ data: char }) => {
 
   character.value = char;
   nodes.update({
@@ -96,30 +104,34 @@ axios.get<Root>(`https://rickandmortyapi.com/api/character/${params.id}`).then((
     label: char.name,
   });
 
-  for (const episode of char.episode) {
-    fetchEpisode(char.id, episode);
-  }
+  fetchLocation(char.id, char.location.url);
+
+  while (network.value === null);
 
   network.value?.focus(char.id);
 });
 
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 
 onMounted(async () => {
-  const container = document.getElementById("character-relation-graph") as HTMLElement;
+  const container = document.getElementById(`character-relation-graph-root-${params.id}`) as HTMLElement;
   const data: Data = {
     nodes: nodes,
     edges: edges,
   };
   const options: Options = {
     autoResize: false,
-    height: "600px"
+    height: "600px",
   };
   network.value = new Network(container, data, options);
+  network.value.on("selectNode", (selected) => {
+    if (selected.nodes[0] === parseInt(params.id as string)) return;
+    push(`/character/${selected.nodes[0]}`);
+  })
 });
+
+onBeforeUnmount(() => {
+  network.value?.destroy();
+})
 </script>
 <style scoped>
 .biological-info {
