@@ -39,7 +39,7 @@
       <ion-select placeholder="Filtrar por episodio" v-model="selectedEpisode" @ionChange="filterCharactersByEpisode">
         <ion-select-option value="">Cualquier episodio</ion-select-option>
         <ion-select-option v-for="episode in episodes" :key="episode.id" :value="episode">{{ episode.episode + " "
-          +episode.name}}</ion-select-option>
+          + episode.name }}</ion-select-option>
       </ion-select>
       <ion-select placeholder="Filtrar por ubicación" v-model="selectedLocation" @ionChange="filterCharactersByLocation">
         <ion-select-option value="">Cualquier ubicacion</ion-select-option>
@@ -52,7 +52,7 @@
           <ion-avatar slot="start">
             <img :src="character.image" alt="character image" />
           </ion-avatar>
-          <ion-label :routerLink="`/character/${character.id}`">
+          <ion-label @click="() => push(`/character/${character.id}`)">
             <h2>{{ character.name }}</h2>
             <p :style="getStatusColor(character.status)">
               {{ getStatusText(character.status) }}
@@ -79,6 +79,9 @@ import { toastController, actionSheetController } from "@ionic/vue";
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonAvatar, IonLabel, IonSearchbar, IonSelect, IonSelectOption, IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/vue';
 import axios from 'axios';
 import supabase from '@/supabase';
+import { useRouter } from 'vue-router';
+
+const { push } = useRouter();
 
 async function openActionSheet(id: number) {
   const { data, error } = await supabase.from("favorites").select().eq("character_id", id).limit(1);
