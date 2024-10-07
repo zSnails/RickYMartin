@@ -5,6 +5,7 @@ import LoginPage from "@/views/LoginPage.vue";
 import SignUpPage from '@/views/SignUpPage.vue';
 import EpisodePage from '@/views/episode/[id].vue';
 import auth from './middleware/auth';
+import CharacterDetails from '@/views/CharacterDetails.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -47,6 +48,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/episode/:id',
     name: 'Episode',
     component: EpisodePage
+  },
+  {
+    path: '/character/:id',
+    name: 'Character',
+    component: CharacterDetails
   }
 ]
 
