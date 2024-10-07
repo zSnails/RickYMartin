@@ -17,6 +17,10 @@
           <ion-icon aria-hidden="true" :icon="square" />
           <ion-label>Episodios</ion-label>
         </ion-tab-button>
+        <ion-tab-button tab="tab4" href="/tabs/tab4">
+          <ion-icon aria-hidden="true" :icon="square" />
+          <ion-label>Locaciones</ion-label>
+        </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
   </ion-page>
