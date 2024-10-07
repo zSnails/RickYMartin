@@ -41,6 +41,10 @@
         <ion-select-option v-for="episode in episodes" :key="episode.id" :value="episode">{{ episode.episode + " "
           +episode.name}}</ion-select-option>
       </ion-select>
+      <ion-select placeholder="Filtrar por ubicación" v-model="selectedLocation" @ionChange="filterCharactersByLocation">
+        <ion-select-option value="">Cualquier ubicacion</ion-select-option>
+        <ion-select-option v-for="location in locations" :key="location.id" :value="location">{{ location.name }}</ion-select-option>
+      </ion-select>
 
       <ion-list>
         <!-- <ion-item v-for="character in filteredCharacters" :key="character.id" button :routerLink="`/character/${character.id}`"> -->
@@ -152,6 +156,7 @@ interface Character {
   image: string;
   species: string;
   episode: string[];
+  location: Location;
 }
 
 interface Episode {
@@ -162,6 +167,13 @@ interface Episode {
   gender: string;
 }
 
+interface Location{
+  id: number;
+  name: string;
+}
+
+
+
 const characters = ref<Character[]>([]);
 const filteredCharacters = ref<Character[]>([]);
 const searchQuery = ref('');
@@ -171,6 +183,10 @@ const episodes = ref<Episode[]>([]);
 const nextPageEpisodes = ref<string | null>('https://rickandmortyapi.com/api/episode');
 const selectedGender = ref('');
 const nextPage = ref<string | null>(null);
+
+const nextPageLocations = ref<string | null>('https://rickandmortyapi.com/api/location');
+const locations = ref<Location[]>([]);
+const selectedLocation = ref<Location | null>(null);
 
 const loadCharacters = async (event: CustomEvent | null = null, reset = false) => {
   if (reset) {
@@ -220,9 +236,24 @@ const loadEpisodes = async () => {
   }
 };
 
+const loadLocations = async () => {
+  if (nextPageLocations.value) {
+    const response = await axios.get(nextPageLocations.value);
+    locations.value.push(...response.data.results);
+    if (response.data.info.next) {
+      nextPageLocations.value = response.data.info.next;
+      loadLocations();
+    }
+  }
+};
+
 onMounted(() => {
   loadCharacters();
   loadEpisodes();
+  loadLocations();
+  
+  
+
 });
 
 const getStatusText = (status: string) => {
@@ -247,7 +278,8 @@ const filterCharacters = () => {
     const matchesQuery = character.name.toLowerCase().includes(query);
     const matchesSpecies = selectedSpecies.value ? character.species === selectedSpecies.value : true;
     const matchesEpisode = selectedEpisode.value.url ? character.episode.includes(selectedEpisode.value.url) : true;
-    return matchesQuery && matchesSpecies && matchesEpisode;
+    const matchesLocation = selectedLocation.value ? character.location.name === selectedLocation.value.name : true;
+    return matchesQuery && matchesSpecies && matchesEpisode && matchesLocation;
   });
 };
 
@@ -258,6 +290,11 @@ const onFilterChange = () => {
 const filterCharactersByEpisode = () => {
   filterCharacters();
 };
+
+const filterCharactersByLocation = () => {
+  filterCharacters();
+};
+
 
 </script>
 
