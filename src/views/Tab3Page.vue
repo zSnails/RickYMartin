@@ -2,31 +2,22 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Personajes Rick and Morty</ion-title>
+        <ion-title>Episodes Graph</ion-title>
       </ion-toolbar>
+      <ion-searchbar color="light" v-model="searchQuery" :debounce="500" @ionInput="filterEpisodes"
+        placeholder="Buscar episodios..."></ion-searchbar>
     </ion-header>
+    
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large" class="schwifty-title">Personajes</ion-title>
+          <ion-title size="large">Character Homeworld Graph</ion-title>
         </ion-toolbar>
       </ion-header>
-      <ion-searchbar color="light" v-model="searchQuery" :debounce="500" @ionInput="filterEpisodes"
-        placeholder="Buscar episodios..."></ion-searchbar>
-      <ion-list>
-        <div class="graph-container" id="legraph"></div>
-        <ion-item v-for="episode in episodes" :key="episode.id" button :href="`/episode/${episode.id}`">
-          <ion-avatar slot="start">
-          </ion-avatar>
-          <ion-label>
-            <h2>{{ episode.name }}</h2>
-            <h3>{{ episode.episode }}</h3>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-
-
+      <div class="graph-container" id="legraph"></div>
     </ion-content>
+    
+    
   </ion-page>
 </template>
 
@@ -49,6 +40,7 @@ interface Episode {
 }
 
 interface Character {
+  data: any;
   id: number;
   image: string;
   name: string;
@@ -91,30 +83,42 @@ const filterEpisodes = () => {
   episodes.value = [];
   nextPage.value = 'https://rickandmortyapi.com/api/episode';
   loadEpisodes();
+  prepareGraph();
 };
 
 async function prepareGraph() {
+  let contEpisodes = 0;
   for (const element of episodes.value) {
+    let contCharacters = 0;
     for (const characterUrl of element.characters) {
       const character = (await loadCharacter(characterUrl)).result;
       nodes.update({
-        id: `character-${element.id}`,
-        image: character.image,
+        id: `character-${element.id}-${character.data.id}`, 
+        image: character.data.image,
         shape: "circularImage",
-        label: character.name,
+        label: character.data.name,
       });
       nodes.update({
-        id: element.id,
+        id: `episode-${element.id}`, 
         color: '#cccccc',
         shape: "square",
         label: element.name,
       });
       edges.update({
-        to: `character-${character.id}`,
-        from: element.id,
+        to: `character-${element.id}-${character.data.id}`, 
+        from: `episode-${element.id}`, 
       } as Edge);
+      contCharacters++;
+      if (contCharacters > 6) {
+        break;
+      }
+    }
+    contEpisodes++;
+    if (contEpisodes > 15) {
+      break;
     }
   }
+  
 }
 
 onMounted(async () => {
@@ -128,42 +132,29 @@ onMounted(async () => {
   const options: Options = {
     autoResize: false,
   };
-  new Network(container, data, options);
+  const network = new Network(container, data, options);
+
+  network.on("selectNode", function (params) {
+    const selectedNodeId = params.nodes[0];
+
+
+    if (selectedNodeId.startsWith('character-')) {
+      const characterId = selectedNodeId.split('-')[2];
+      //window.location.href = `/character/${characterId}`;
+      //Not implemented yet
+    } else if (selectedNodeId.startsWith('episode-')) {
+      const episodeId = selectedNodeId.split('-')[1];
+      window.location.href = `/episode/${episodeId}`;
+    }
+  });
+
 });
 
 
 </script>
-
-
 <style scoped>
-ion-content {
-  --background: #62a4ab;
-}
-
-ion-item {
-  --background: #fffeef;
-  --color: #000000;
-}
-
-ion-toolbar {
-  --background: #62a4ab;
-  --color: #97ce4c;
-}
-
-.schwifty-title {
-  font-family: 'GetSchwifty', sans-serif;
-  font-size: 3rem;
-}
-
-ion-select {
-  margin: 10px;
-  --background: #fffeef;
-  --color: #000000;
-}
-
 .graph-container {
   width: 100%;
   height: 100%;
 }
-
 </style>
