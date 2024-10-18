@@ -97,7 +97,6 @@ async function prepareGraph() {
 
 
 onMounted(async () => {
-  await prepareGraph();
 
   const container = document.getElementById("legraph") as HTMLElement;
   const data: Data = {
@@ -115,6 +114,8 @@ onMounted(async () => {
     //selected.nodes[0];
     push(`/character/${selected.nodes[0]}`);
   })
+
+  await prepareGraph();
   //let lastPosition: Position | null = null;
   //const max_zoom = 2;
   //const min_zoom = 1.5;
