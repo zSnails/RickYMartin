@@ -15,38 +15,48 @@
       <ion-searchbar color="light" v-model="searchQuery" :debounce="500" @ionInput="onFilterChange"
         placeholder="Buscar personajes..."></ion-searchbar>
 
-      <ion-select placeholder="Filtrar por especie" v-model="selectedSpecies" @ionChange="onFilterChange">
-        <ion-select-option value="">Todas las especies</ion-select-option>
-        <ion-select-option value="Human">Humano</ion-select-option>
-        <ion-select-option value="Alien">Alien</ion-select-option>
-        <ion-select-option value="Humanoid">Humanoide</ion-select-option>
-        <ion-select-option value="Unknown">Desconocido</ion-select-option>
-        <ion-select-option value="poopybutthole">Poppybutthole</ion-select-option>
-        <ion-select-option value="MythologicalCreature">Criatura Mítica</ion-select-option>
-        <ion-select-option value="Animal">Animal</ion-select-option>
-        <ion-select-option value="Robot">Robot</ion-select-option>
-        <ion-select-option value="Cronenberg">Cronenberg</ion-select-option>
-        <ion-select-option value="Disease">Enfermedad</ion-select-option>
-      </ion-select>
-
-      <ion-select placeholder="Filtrar por género" v-model="selectedGender" @ionChange="onFilterChange">
-        <ion-select-option value="">Todos los géneros</ion-select-option>
-        <ion-select-option value="Female">Femenino</ion-select-option>
-        <ion-select-option value="Male">Masculino</ion-select-option>
-        <ion-select-option value="Genderless">Sin género</ion-select-option>
-        <ion-select-option value="unknown">Desconocido</ion-select-option>
-      </ion-select>
-      <ion-select placeholder="Filtrar por episodio" v-model="selectedEpisode" @ionChange="filterCharactersByEpisode">
-        <ion-select-option value="">Cualquier episodio</ion-select-option>
-        <ion-select-option v-for="episode in episodes" :key="episode.id" :value="episode">{{ episode.episode + " "
-          + episode.name }}</ion-select-option>
-      </ion-select>
-      <ion-select placeholder="Filtrar por ubicación" v-model="selectedLocation"
-        @ionChange="filterCharactersByLocation">
-        <ion-select-option value="">Cualquier ubicacion</ion-select-option>
-        <ion-select-option v-for="location in locations" :key="location.id" :value="location">{{ location.name
-          }}</ion-select-option>
-      </ion-select>
+      <ion-list>
+        <ion-item>
+          <ion-select label="Especie" placeholder="Cualquiera" v-model="selectedSpecies" @ionChange="onFilterChange">
+            <ion-select-option value="">Todas las especies</ion-select-option>
+            <ion-select-option value="Human">Humano</ion-select-option>
+            <ion-select-option value="Alien">Alien</ion-select-option>
+            <ion-select-option value="Humanoid">Humanoide</ion-select-option>
+            <ion-select-option value="Unknown">Desconocido</ion-select-option>
+            <ion-select-option value="poopybutthole">Poppybutthole</ion-select-option>
+            <ion-select-option value="MythologicalCreature">Criatura Mítica</ion-select-option>
+            <ion-select-option value="Animal">Animal</ion-select-option>
+            <ion-select-option value="Robot">Robot</ion-select-option>
+            <ion-select-option value="Cronenberg">Cronenberg</ion-select-option>
+            <ion-select-option value="Disease">Enfermedad</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-select label="Género" placeholder="Cualquiera" v-model="selectedGender" @ionChange="onFilterChange">
+            <ion-select-option value="">Todos los géneros</ion-select-option>
+            <ion-select-option value="Female">Femenino</ion-select-option>
+            <ion-select-option value="Male">Masculino</ion-select-option>
+            <ion-select-option value="Genderless">Sin género</ion-select-option>
+            <ion-select-option value="unknown">Desconocido</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-select label="Episodio" placeholder="Cualquiera" v-model="selectedEpisode"
+            @ionChange="filterCharactersByEpisode">
+            <ion-select-option value="">Cualquier episodio</ion-select-option>
+            <ion-select-option v-for="episode in episodes" :key="episode.id" :value="episode">{{ episode.episode + " "
+              + episode.name }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-select label="Ubicación" placeholder="Cualquiera" v-model="selectedLocation"
+            @ionChange="filterCharactersByLocation">
+            <ion-select-option value="">Cualquier ubicacion</ion-select-option>
+            <ion-select-option v-for="location in locations" :key="location.id" :value="location">{{ location.name
+              }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
 
       <ion-list>
         <!-- <ion-item v-for="character in filteredCharacters" :key="character.id" button :routerLink="`/character/${character.id}`"> -->
