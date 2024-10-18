@@ -24,7 +24,7 @@ import { IonInput, IonButton, IonInputPasswordToggle, IonCard, IonCardContent, I
 import { ref } from "vue";
 import supabase from "@/supabase";
 
-const { push } = useIonRouter();
+const { replace } = useIonRouter();
 
 const email = ref<string>("");
 const password = ref<string>("");
@@ -38,6 +38,6 @@ const signIn = async () => {
     console.error(resp.error);
     return;
   }
-  push({ path: '/' });
+  replace({ path: '/' });
 };
 </script>
