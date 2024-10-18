@@ -125,9 +125,8 @@ onMounted(async () => {
 
 
     if (selectedNodeId.startsWith('character-')) {
-      //const characterId = selectedNodeId.split('-')[2];
-      //window.location.href = `/character/${characterId}`;
-      //Not implemented yet
+      const characterId = selectedNodeId.split('-')[1];
+      push(`/character/${characterId}`);
     } else if (selectedNodeId.startsWith('episode-')) {
       const episodeId = selectedNodeId.split('-')[1];
       push(`/episode/${episodeId}`);
