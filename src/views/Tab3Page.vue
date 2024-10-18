@@ -5,26 +5,21 @@
         <ion-title>Grafo de Episodios</ion-title>
       </ion-toolbar>
     </ion-header>
-
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Episodes Graph</ion-title>
         </ion-toolbar>
       </ion-header>
-      <ion-searchbar color="light" v-model="searchQuery" :debounce="500" @ionInput="filterEpisodes"
-        placeholder="Buscar episodios..."></ion-searchbar>
-      <div class="graph-container" id="legraph"></div>
+      <div class="graph-container" id="episode-graph"></div>
     </ion-content>
-
-
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, useIonRouter } from '@ionic/vue';
 
 import { Network, Data, Edge, Node, Options, DataSet } from "vis-network/standalone";
 
@@ -75,13 +70,6 @@ const loadCharacter = async (characterUrl: string) => {
 
   return { result };
 }
-
-const filterEpisodes = () => {
-  episodes.value = [];
-  nextPage.value = 'https://rickandmortyapi.com/api/episode';
-  loadEpisodes();
-  prepareGraph();
-};
 
 async function prepareGraph() {
   let contEpisodes = 0;
