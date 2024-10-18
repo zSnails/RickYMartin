@@ -106,10 +106,11 @@ async function prepareGraph() {
 
 }
 
+const { push } = useIonRouter();
+
 onMounted(async () => {
   await loadEpisodes();
-  await prepareGraph();
-  const container = document.getElementById("legraph") as HTMLElement;
+  const container = document.getElementById("episode-graph") as HTMLElement;
   const data: Data = {
     nodes: nodes,
     edges: edges,
