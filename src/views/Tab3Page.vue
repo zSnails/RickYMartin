@@ -130,10 +130,12 @@ onMounted(async () => {
       //Not implemented yet
     } else if (selectedNodeId.startsWith('episode-')) {
       const episodeId = selectedNodeId.split('-')[1];
-      window.location.href = `/episode/${episodeId}`;
+      push(`/episode/${episodeId}`);
     }
   });
 
+
+  await prepareGraph();
 });
 
 
