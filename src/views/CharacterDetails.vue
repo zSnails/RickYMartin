@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-buttons defaultHref="/home" slot="start">
+        <ion-buttons defaultHref="/tabs/tab1" slot="start">
           <ion-back-button></ion-back-button>
         </ion-buttons>
         <ion-title>{{ character?.name }}</ion-title>
@@ -102,19 +102,15 @@ axios.get<Root>(`https://rickandmortyapi.com/api/character/${params.id}`).then(a
     label: char.name,
   });
 
-  fetchLocation(char.id, char.location.url);
-
-  while (network.value === null);
-
   network.value?.focus(char.id);
+
+  fetchLocation(char.id, char.location.url); // BUG: after leaving the page there is still a process fetching characters in the background
 });
 
 
 onMounted(async () => {
   const elemid = `character-relation-graph-root-${params.id}`;
-  console.log(elemid);
   const container = document.getElementById(elemid) as HTMLElement;
-  console.log(container);
   const data: Data = {
     nodes: nodes,
     edges: edges,

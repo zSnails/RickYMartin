@@ -25,13 +25,15 @@
 </template>
 <script setup lang="ts">
 import { Result, Root } from '@/characters-root';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, ActionSheetButton } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, ActionSheetButton, useIonRouter } from '@ionic/vue';
 import axios from "axios";
 import { ref, onMounted } from 'vue';
 import { Network, Data, Edge, Node, Options, DataSet } from "vis-network/standalone";
 import { add } from 'ionicons/icons';
 
 const nextUrl = ref<string | null>("https://rickandmortyapi.com/api/character");
+
+const { push } = useIonRouter();
 
 const nodes = new DataSet<Node>([]);
 const edges = new DataSet<Edge>([]);
@@ -71,7 +73,7 @@ async function prepareGraph() {
   const newGroup = await loadCharacters()
   for (const element of newGroup.results) {
     nodes.update({
-      id: `character-${element.id}`,
+      id: `${element.id}`,
       image: element.image,
       shape: "circularImage",
       label: element.name,
@@ -87,7 +89,7 @@ async function prepareGraph() {
       });
     }
     edges.update({
-      to: `character-${element.id}`,
+      to: `${element.id}`,
       from: locationId,
     } as Edge);
   }
@@ -105,7 +107,14 @@ onMounted(async () => {
   const options: Options = {
     autoResize: false,
   };
-  new Network(container, data, options);
+  const network = new Network(container, data, options);
+
+  network.on("selectNode", (selected) => {
+    const id: string = selected.nodes[0];
+    if (id.includes("location")) return;
+    //selected.nodes[0];
+    push(`/character/${selected.nodes[0]}`);
+  })
   //let lastPosition: Position | null = null;
   //const max_zoom = 2;
   //const min_zoom = 1.5;

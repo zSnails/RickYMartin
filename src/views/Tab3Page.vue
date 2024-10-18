@@ -2,34 +2,31 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Episodes Graph</ion-title>
+        <ion-title>Grafo de Episodios</ion-title>
       </ion-toolbar>
-      <ion-searchbar color="light" v-model="searchQuery" :debounce="500" @ionInput="filterEpisodes"
-        placeholder="Buscar episodios..."></ion-searchbar>
     </ion-header>
-    
+
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Character Homeworld Graph</ion-title>
+          <ion-title size="large">Episodes Graph</ion-title>
         </ion-toolbar>
       </ion-header>
+      <ion-searchbar color="light" v-model="searchQuery" :debounce="500" @ionInput="filterEpisodes"
+        placeholder="Buscar episodios..."></ion-searchbar>
       <div class="graph-container" id="legraph"></div>
     </ion-content>
-    
-    
+
+
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar, IonList, IonItem, IonAvatar, IonLabel } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar } from '@ionic/vue';
 
-import { Result, Root } from '@/characters-root';
-import { ActionSheetButton } from '@ionic/vue';
 import { Network, Data, Edge, Node, Options, DataSet } from "vis-network/standalone";
-import { add } from 'ionicons/icons';
 
 interface Episode {
   id: number;
@@ -93,20 +90,20 @@ async function prepareGraph() {
     for (const characterUrl of element.characters) {
       const character = (await loadCharacter(characterUrl)).result;
       nodes.update({
-        id: `character-${element.id}-${character.data.id}`, 
+        id: `character-${element.id}-${character.data.id}`,
         image: character.data.image,
         shape: "circularImage",
         label: character.data.name,
       });
       nodes.update({
-        id: `episode-${element.id}`, 
+        id: `episode-${element.id}`,
         color: '#cccccc',
         shape: "square",
         label: element.name,
       });
       edges.update({
-        to: `character-${element.id}-${character.data.id}`, 
-        from: `episode-${element.id}`, 
+        to: `character-${element.id}-${character.data.id}`,
+        from: `episode-${element.id}`,
       } as Edge);
       contCharacters++;
       if (contCharacters > 6) {
@@ -118,7 +115,7 @@ async function prepareGraph() {
       break;
     }
   }
-  
+
 }
 
 onMounted(async () => {

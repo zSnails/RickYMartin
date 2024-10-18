@@ -41,9 +41,11 @@
         <ion-select-option v-for="episode in episodes" :key="episode.id" :value="episode">{{ episode.episode + " "
           + episode.name }}</ion-select-option>
       </ion-select>
-      <ion-select placeholder="Filtrar por ubicación" v-model="selectedLocation" @ionChange="filterCharactersByLocation">
+      <ion-select placeholder="Filtrar por ubicación" v-model="selectedLocation"
+        @ionChange="filterCharactersByLocation">
         <ion-select-option value="">Cualquier ubicacion</ion-select-option>
-        <ion-select-option v-for="location in locations" :key="location.id" :value="location">{{ location.name }}</ion-select-option>
+        <ion-select-option v-for="location in locations" :key="location.id" :value="location">{{ location.name
+          }}</ion-select-option>
       </ion-select>
 
       <ion-list>
@@ -170,7 +172,7 @@ interface Episode {
   gender: string;
 }
 
-interface Location{
+interface Location {
   id: number;
   name: string;
 }
@@ -254,8 +256,8 @@ onMounted(() => {
   loadCharacters();
   loadEpisodes();
   loadLocations();
-  
-  
+
+
 
 });
 
@@ -302,28 +304,28 @@ const filterCharactersByLocation = () => {
 </script>
 
 <style scoped>
-ion-content {
-  --background: #62a4ab;
-}
-
-ion-item {
-  --background: #fffeef;
-  --color: #000000;
-}
-
-ion-toolbar {
-  --background: #62a4ab;
-  --color: #97ce4c;
-}
-
-.schwifty-title {
-  font-family: 'GetSchwifty', sans-serif;
-  font-size: 3rem;
-}
-
-ion-select {
-  margin: 10px;
-  --background: #fffeef;
-  --color: #000000;
-}
+/*ion-content {*/
+/*  --background: #62a4ab;*/
+/*}*/
+/**/
+/*ion-item {*/
+/*  --background: #fffeef;*/
+/*  --color: #000000;*/
+/*}*/
+/**/
+/*ion-toolbar {*/
+/*  --background: #62a4ab;*/
+/*  --color: #97ce4c;*/
+/*}*/
+/**/
+/*.schwifty-title {*/
+/*  font-family: 'GetSchwifty', sans-serif;*/
+/*  font-size: 3rem;*/
+/*}*/
+/**/
+/*ion-select {*/
+/*  margin: 10px;*/
+/*  --background: #fffeef;*/
+/*  --color: #000000;*/
+/*}*/
 </style>

@@ -7,32 +7,30 @@ http://ionicframework.com/docs/theming/ */
     font-style: normal;
 }
 
-:root {
-    --ion-background-color: #fffeef !important;
-    --ion-overlay-background-color: #fffeef !important;
-    --ion-toolbar-background: #62a4ab !important;
-    /* --ion-tab-bar-color: black !important; */
-    --ion-tab-bar-background: #fffeef !important;
-    --ion-background: var(--ion-toolbar-background) !important;
-    /* --ion-text-color: white; */
-    --rick-green: #97ce4c;
-}
+/*:root {*/
+/*    --ion-background-color: #fffeef !important;*/
+/*    --ion-overlay-background-color: #fffeef !important;*/
+/*    --ion-toolbar-background: #62a4ab !important;*/
+/*    --ion-tab-bar-background: #fffeef !important;*/
+/*    --ion-background: var(--ion-toolbar-background) !important;*/
+/*    --rick-green: #97ce4c;*/
+/*}*/
 
-ion-header,
-ion-toolbar {
-    --background: var(--ion-toolbar-background) !important;
-    --color: var(--rick-green);
-}
+/*ion-header,*/
+/*ion-toolbar {*/
+/*    --background: var(--ion-toolbar-background) !important;*/
+/*    --color: var(--rick-green);*/
+/*}*/
 
 /* ion-content { */
 /*     --background: var(--ion-toolbar-background) !important; */
 /* } */
 
 
-.center-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
+/*.center-content {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    height: 100%;*/
+/*}*/
