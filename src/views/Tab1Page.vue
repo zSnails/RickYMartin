@@ -44,15 +44,14 @@
           <ion-select label="Episodio" placeholder="Cualquiera" v-model="selectedEpisode"
             @ionChange="filterCharactersByEpisode">
             <ion-select-option value="">Cualquier episodio</ion-select-option>
-            <ion-select-option v-for="episode in episodes" :key="episode.id" :value="episode">{{ episode.episode + " "
-              + episode.name }}</ion-select-option>
-          </ion-select>
+            <ion-select-option v-for="episode in episodes" :key="episode.id" :value="episode.url">{{ episode.episode }}
+              {{ episode.name }}</ion-select-option> </ion-select>
         </ion-item>
         <ion-item>
           <ion-select label="Ubicación" placeholder="Cualquiera" v-model="selectedLocation"
             @ionChange="filterCharactersByLocation">
             <ion-select-option value="">Cualquier ubicacion</ion-select-option>
-            <ion-select-option v-for="location in locations" :key="location.id" :value="location">{{ location.name
+            <ion-select-option v-for="location in locations" :key="location.id" :value="location.name">{{ location.name
               }}</ion-select-option>
           </ion-select>
         </ion-item>
@@ -193,7 +192,7 @@ const characters = ref<Character[]>([]);
 const filteredCharacters = ref<Character[]>([]);
 const searchQuery = ref('');
 const selectedSpecies = ref('');
-const selectedEpisode = ref<{ url: string }>({ url: "" });
+const selectedEpisode = ref("");
 const episodes = ref<Episode[]>([]);
 const nextPageEpisodes = ref<string | null>('https://rickandmortyapi.com/api/episode');
 const selectedGender = ref('');
@@ -201,7 +200,7 @@ const nextPage = ref<string | null>(null);
 
 const nextPageLocations = ref<string | null>('https://rickandmortyapi.com/api/location');
 const locations = ref<Location[]>([]);
-const selectedLocation = ref<Location | null>(null);
+const selectedLocation = ref("");
 
 const loadCharacters = async (event: CustomEvent | null = null, reset = false) => {
   if (reset) {
@@ -292,8 +291,8 @@ const filterCharacters = () => {
   filteredCharacters.value = characters.value.filter(character => {
     const matchesQuery = character.name.toLowerCase().includes(query);
     const matchesSpecies = selectedSpecies.value ? character.species === selectedSpecies.value : true;
-    const matchesEpisode = selectedEpisode.value.url ? character.episode.includes(selectedEpisode.value.url) : true;
-    const matchesLocation = selectedLocation.value ? character.location.name === selectedLocation.value.name : true;
+    const matchesEpisode = selectedEpisode.value ? character.episode.includes(selectedEpisode.value) : true;
+    const matchesLocation = selectedLocation.value ? character.location.name === selectedLocation.value : true;
     return matchesQuery && matchesSpecies && matchesEpisode && matchesLocation;
   });
 };
