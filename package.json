@@ -24,6 +24,7 @@
     "@supabase/supabase-js": "^2.45.4",
     "axios": "^1.7.7",
     "ionicons": "^7.0.0",
+    "pinia": "^2.2.4",
     "vis-data": "^7.1.9",
     "vis-network": "^9.1.9",
     "vis.js": "^1.1.0",
