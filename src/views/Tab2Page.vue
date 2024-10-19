@@ -30,8 +30,10 @@ import axios from "axios";
 import { ref, onMounted } from 'vue';
 import { Network, Data, Edge, Node, Options, DataSet } from "vis-network/standalone";
 import { add } from 'ionicons/icons';
-
+import { useCacheStore } from '@/cache';
 const nextUrl = ref<string | null>("https://rickandmortyapi.com/api/character");
+
+const { addCharacter } = useCacheStore();
 
 const { push } = useIonRouter();
 
@@ -52,7 +54,6 @@ const loadCharacters = async () => {
 
 async function handleDismiss(event: CustomEvent) {
   if (event.detail?.data?.action === "load-more") {
-    await loadCharacters();
     await prepareGraph();
   }
 }
@@ -72,6 +73,7 @@ const seenLocations: Record<string, boolean> = {};
 async function prepareGraph() {
   const newGroup = await loadCharacters()
   for (const element of newGroup.results) {
+    addCharacter(element);
     nodes.update({
       id: `${element.id}`,
       image: element.image,

@@ -43,8 +43,10 @@ import axios from "axios";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useRoute } from 'vue-router';
 import { sleep } from "@supabase/auth-js/dist/module/lib/helpers";
+import { useCacheStore } from "@/cache";
 
 const { params } = useRoute();
+const { fetchCharacter } = useCacheStore();
 
 const nodes = new DataSet<Node>([]);
 const edges = new DataSet<Edge>([]);
@@ -66,8 +68,9 @@ interface Location {
 
 const seenCharacters: Record<string, boolean> = {};
 
-const fetchCharacter = async (rootId: number, char: string) => {
-  const { data: character } = await axios.get<Root>(char);
+const fc = async (rootId: number, char: string) => {
+  //const { data: character } = await axios.get<Root>(char);
+  const character = await fetchCharacter(char);
   if (character.id === rootId) return;
   nodes.update({
     id: character.id,
@@ -86,13 +89,13 @@ const fetchLocation = async (rootId: number, location: string) => {
   const { data: episode } = await axios.get<Location>(location);
   for (const resident of episode.residents) {
     if (Object.hasOwn(seenCharacters, resident)) continue;
-    fetchCharacter(rootId, resident);
+    fc(rootId, resident);
     seenCharacters[resident] = true;
     await sleep(1000);
   }
 };
 
-axios.get<Root>(`https://rickandmortyapi.com/api/character/${params.id}`).then(async ({ data: char }) => {
+fetchCharacter(`https://rickandmortyapi.com/api/character/${params.id}`).then(async (char) => {
 
   character.value = char;
   nodes.update({
